@@ -18,12 +18,9 @@ spec:
         app: server
     spec:
       volumes:                        
-          - name: logging-pv-storage
-            persistentVolumeClaim:
-              claimName: logging-volume-claim
-          - name: log-config
-            configMap:
-              name: fluentd-config
+        - name: logging-pv-storage
+          persistentVolumeClaim:
+            claimName: logging-volume-claim
       containers:
       - name: server
         image: evgenyarbatov/http-server:latest
@@ -42,16 +39,24 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
         volumeMounts:
-          - mountPath: "/var/log/nginx/"
+          - mountPath: "/var/log/server/"
             name: logging-pv-storage
-      - name: fluentd
-        image: fluentd
-        env:
-          - name: FLUENTD_OPT
-            value: -c /etc/fluentd-config/fluent.conf
-        volumeMounts:
-          - name: logging-pv-storage
-            mountPath: "/var/log"
-          - name: log-config
-            mountPath: "/etc/fluentd-config"
 status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: server
+  name: server
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: server
+  type: NodePort
+status:
+  loadBalancer: {}
