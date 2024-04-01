@@ -1,10 +1,10 @@
-FROM --platform=linux/amd64 node:12.18.1
+FROM --platform=linux/amd64 node:lts
  
 WORKDIR /app
 COPY . /app
 
 RUN npm install
 
-EXPOSE 8000
+EXPOSE 8080
 
 CMD ["npm","start"]
