@@ -16,12 +16,16 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana:7.4.1
+        image: docker.elastic.co/kibana/kibana:8.13.0
         env:
         - name: ELASTICSEARCH_URL
           value: http://elasticsearch:9200
         - name: XPACK_SECURITY_ENABLED
           value: "true"
+        - name: ELASTICSEARCH_USERNAME
+          value: elastic
+        - name: ELASTICSEARCH_PASSWORD
+          value: "12345"
         ports:
         - containerPort: 5601
           name: http

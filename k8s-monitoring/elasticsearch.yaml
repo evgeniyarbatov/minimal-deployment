@@ -17,10 +17,14 @@ spec:
     spec:
       containers:
       - name: elasticsearch
-        image: elasticsearch:8.13.0
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
         env:
         - name: discovery.type
           value: single-node
+        - name: ELASTICSEARCH_USERNAME
+          value: elastic
+        - name: ELASTICSEARCH_PASSWORD
+          value: "12345"
         ports:
         - containerPort: 9200
           name: http
