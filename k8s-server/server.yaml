@@ -17,10 +17,10 @@ spec:
       labels:
         app: server
     spec:
-      volumes:                        
-        - name: logging-pv-storage
-          persistentVolumeClaim:
-            claimName: logging-volume-claim
+      volumes:
+      - name: logging-pv-storage
+        persistentVolumeClaim:
+          claimName: logging-volume-claim
       containers:
       - name: server
         image: evgenyarbatov/http-server:latest
@@ -39,8 +39,8 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
         volumeMounts:
-          - mountPath: "/var/log/server/"
-            name: logging-pv-storage
+        - mountPath: "/var/log/server/"
+          name: logging-pv-storage
 status: {}
 ---
 apiVersion: v1
