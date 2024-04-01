@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: server
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: server
+    spec:
+      volumes:                        
+          - name: logging-pv-storage
+            persistentVolumeClaim:
+              claimName: logging-volume-claim
+          - name: log-config
+            configMap:
+              name: fluentd-config
+      containers:
+      - name: server
+        image: nginx
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - mountPath: "/var/log/nginx/"
+            name: logging-pv-storage
+      - name: fdlogger
+        image: fluentd
+        env:
+          - name: FLUENTD_OPT
+            value: -c /etc/fluentd-config/fluent.conf
+        volumeMounts:
+          - name: logging-pv-storage
+            mountPath: "/var/log"
+          - name: log-config
+            mountPath: "/etc/fluentd-config"
+status: {}
