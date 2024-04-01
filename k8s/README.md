@@ -4,7 +4,7 @@ This will configure and launch Kubernetes cluster based on Dockerhub images.
 
 We will use fluentd to send logs to Kibana.
 
-## Run with minikube
+## Setup
 
 Update `deployment.yaml` with the image name from Doockerhub:
 
@@ -12,6 +12,8 @@ Update `deployment.yaml` with the image name from Doockerhub:
       - name: server
         image: evgeniyarbatov/http-server:latest # Change this
 ```
+
+## Run with minikube
 
 Create the deployment:
 
@@ -23,6 +25,12 @@ Get status:
 
 ```
 k get all
+```
+
+Connect to specific pod's shell:
+
+```
+kubectl exec --stdin --tty server-6cbdc7db5b-2smzd -- /bin/bash
 ```
 
 Get URL:

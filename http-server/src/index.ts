@@ -10,12 +10,10 @@ app.get("/", async function (req, res) {
 });
 
 app.get('/healthz', (req: Request, res: Response): void => {
-  logger.info("Health probe")
   res.send('OK');
 });
 
 app.get('/ready', (req: Request, res: Response): void => {
-  logger.info("Readiness probe")
   res.send('OK');
 });
 
