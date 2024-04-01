@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
+  labels:
+    run: kibana
   name: kibana
 spec:
   selector:
@@ -27,13 +30,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kibana
+  creationTimestamp: null
   labels:
-	service: kibana
+    service: kibana
+  name: kibana
 spec:
-  type: NodePort
-  selector:
-	  run: kibana
   ports:
   - port: 5601
-	targetPort: 5601
+    protocol: TCP
+    targetPort: 5601
+  selector:
+    run: kibana
+  type: NodePort
+status:
+  loadBalancer: {}

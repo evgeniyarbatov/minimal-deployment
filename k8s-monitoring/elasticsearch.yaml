@@ -1,44 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
+  labels:
+    component: elasticsearch
   name: elasticsearch
 spec:
-	selector:
-		matchLabels:
-				component: elasticsearch
+  selector:
+    matchLabels:
+      component: elasticsearch
   template:
-	metadata:
-  	labels:
-    	component: elasticsearch
-	spec:
-  	containers:
-  	- name: elasticsearch
-    	image: elasticsearch:8.13.0
-    	env:
-    	- name: discovery.type
-      	value: single-node
-    	ports:
-    	- containerPort: 9200
-      	name: http
-      	protocol: TCP
-    	resources:
-      	limits:
-        	cpu: 500m
-        	memory: 4Gi
-      	requests:
-        	cpu: 500m
-        	memory: 4Gi
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+        image: elasticsearch:8.13.0
+        env:
+        - name: discovery.type
+          value: single-node
+        ports:
+        - containerPort: 9200
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 4Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch
+  creationTimestamp: null
   labels:
-		service: elasticsearch
+    service: elasticsearch
+  name: elasticsearch
 spec:
-  type: NodePort
-  selector:
-		component: elasticsearch
   ports:
   - port: 9200
-	targetPort: 9200‍
+    protocol: TCP
+    targetPort: 9200
+  selector:
+    component: elasticsearch
+  type: NodePort
+status:
+  loadBalancer: {}
