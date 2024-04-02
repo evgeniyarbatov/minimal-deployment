@@ -4,8 +4,21 @@ metadata:
   name: elasticsearch
 spec:
   version: 8.13.0
+  auth:
+    fileRealm:
+    - secretName: secret-basic-auth
   nodeSets:
   - name: default
     count: 1
     config:
       node.store.allow_mmap: false
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-basic-auth
+type: kubernetes.io/basic-auth
+stringData:
+  username: elastic
+  password: secret
+  roles: kibana_admin,ingest_admin
