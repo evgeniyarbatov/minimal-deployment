@@ -1,7 +1,18 @@
-# Minimal K8S Deployment
+# Scaling NodeJS with K8S
 
 Imagine you have a bunch of NodeJS scripts which are running on localhost. 
 
-Your goal is to make sure that those NodeJS scripts are running reliably and you can monitor them.
+Your goal is to make sure that these NodeJS scripts are running reliably and you can monitor them.
 
-The plan is to create a minimal K8S setup and Kibana monitoring. The focus is on making it as lighweight as possible.
+In this repo:
+
+- `http-server` is the TypeScript version of basic HTTP server
+- `dockerhub` has Terraform scripts to publish `http-server` to Dockerhub
+- `k8s` creates Kubernetes cluster with the HTTP server, Elasticsearch and Kibana
+
+This is what this achieves:
+
+- Instead of manually deploying NodeJS scripts by copying files you can distribute Docker images
+- Kubernetes makes sure that NodeJS scripts are up and running with liveness and readiness probes
+- You can now use Kubernetes to gradually rollout new versions of NodeJS scripts
+- You now have centralised logging with Elasticsearch and Kibana instead of grepping files
