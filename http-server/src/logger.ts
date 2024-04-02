@@ -10,8 +10,8 @@ const logger = createLogger({
   transports: [
     new transports.File({ 
       filename: process.env.NODE_ENV == 'dev' 
-        ? 'logs/http-server.log'
-        : '/var/log/http-server.log' 
+        ? 'logs/httpserver.log'
+        : '/var/log/httpserver.log' 
     }),
   ],
 });

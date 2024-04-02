@@ -78,9 +78,11 @@ spec:
         - name: FLUENT_UID
           value: "0"
         - name: FLUENT_CONTAINER_TAIL_PATH
-          value: "/var/log/*.log"
+          value: "/var/log/httpserver.log"
         - name: FLUENTD_SYSTEMD_CONF
           value: "disable"
+        - name: FLUENT_CONTAINER_TAIL_PARSER_TYPE
+          value: "json"
         resources:
           limits:
             memory: 200Mi
