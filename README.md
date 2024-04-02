@@ -14,5 +14,5 @@ Why do this:
 
 - Distribute Docker images instead of copying files manually
 - Kubernetes uses liveness and readiness probes to check on the health of NodeJS scripts
-- You can now use Kubernetes to gradually rollout new versions of NodeJS scripts
+- You can use Kubernetes to gradually rollout new versions of NodeJS scripts
 - You now have centralised logging with Elasticsearch and Kibana
