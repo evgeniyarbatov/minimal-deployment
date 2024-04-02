@@ -10,9 +10,9 @@ In this repo:
 - `dockerhub` has Terraform scripts to publish `http-server` to Dockerhub
 - `k8s` creates Kubernetes cluster with the HTTP server, Elasticsearch and Kibana
 
-This is what this achieves:
+Why do this:
 
-- Instead of manually deploying NodeJS scripts by copying files you can distribute Docker images
-- Kubernetes makes sure that NodeJS scripts are up and running with liveness and readiness probes
+- Distribute Docker images instead of copying files manually
+- Kubernetes uses liveness and readiness probes to check on the health of NodeJS scripts
 - You can now use Kubernetes to gradually rollout new versions of NodeJS scripts
-- You now have centralised logging with Elasticsearch and Kibana instead of grepping files
+- You now have centralised logging with Elasticsearch and Kibana
