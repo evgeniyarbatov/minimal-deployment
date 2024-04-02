@@ -1,14 +1,18 @@
-import { createLogger, format, transports } from 'winston';
+import winston, { format, createLogger, transports } from 'winston';
 
 // Configure the logger
 const logger = createLogger({
   level: 'info',
   format: format.combine(
     format.timestamp(),
-    format.printf(({ level, message, timestamp }) => `${timestamp} ${level.toUpperCase()}: ${message}`)
+    format.json()
   ),
   transports: [
-    new transports.File({ filename: '/var/log/http-server.log' }),
+    new transports.File({ 
+      filename: process.env.NODE_ENV == 'dev' 
+        ? 'logs/http-server.log'
+        : '/var/log/http-server.log' 
+    }),
   ],
 });
 
