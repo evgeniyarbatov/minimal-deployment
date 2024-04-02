@@ -1,6 +1,8 @@
 # Scaling NodeJS with K8S
 
-Imagine you have a bunch of NodeJS scripts. Your want to make sure that these scripts are running reliably and you can monitor them.
+Imagine you have a bunch of NodeJS scripts. 
+
+You want to make sure that these scripts are running reliably and you can monitor them.
 
 In this repo:
 
