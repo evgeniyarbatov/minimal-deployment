@@ -21,4 +21,3 @@ type: kubernetes.io/basic-auth
 stringData:
   username: elastic
   password: secret
-  roles: kibana_admin,ingest_admin

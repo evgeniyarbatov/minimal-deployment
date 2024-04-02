@@ -41,15 +41,15 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: server
-  name: server
+    app: http-server
+  name: http-server
 spec:
   ports:
   - port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    app: server
+    app: http-server
   type: NodePort
 status:
   loadBalancer: {}
