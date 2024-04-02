@@ -8,7 +8,7 @@ const logger = createLogger({
     format.printf(({ level, message, timestamp }) => `${timestamp} ${level.toUpperCase()}: ${message}`)
   ),
   transports: [
-    new transports.File({ filename: 'logs/app.log' }),
+    new transports.File({ filename: '/var/log/http-server.log' }),
   ],
 });
 
