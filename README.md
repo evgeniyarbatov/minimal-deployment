@@ -6,7 +6,7 @@ Your goal is to make sure that these NodeJS scripts are running reliably and you
 
 In this repo:
 
-- `http-server` is the TypeScript version of basic HTTP server
+- `http-server` is a TypeScript version of the basic HTTP server
 - `dockerhub` has Terraform scripts to publish `http-server` to Dockerhub
 - `k8s` creates Kubernetes cluster with the HTTP server, Elasticsearch and Kibana
 
