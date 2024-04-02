@@ -1,56 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
 metadata:
-  creationTimestamp: null
-  labels:
-    component: elasticsearch
   name: elasticsearch
 spec:
-  selector:
-    matchLabels:
-      component: elasticsearch
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        component: elasticsearch
-    spec:
-      containers:
-      - name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
-        env:
-        - name: discovery.type
-          value: single-node
-        - name: ELASTICSEARCH_USERNAME
-          value: elastic
-        - name: ELASTICSEARCH_PASSWORD
-          value: "12345"
-        ports:
-        - containerPort: 9200
-          name: http
-          protocol: TCP
-        resources:
-          limits:
-            cpu: 500m
-            memory: 4Gi
-          requests:
-            cpu: 500m
-            memory: 4Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    service: elasticsearch
-  name: elasticsearch
-spec:
-  ports:
-  - port: 9200
-    protocol: TCP
-    targetPort: 9200
-  selector:
-    component: elasticsearch
-  type: NodePort
-status:
-  loadBalancer: {}
+  version: 8.13.0
+  nodeSets:
+  - name: default
+    count: 1
+    config:
+      node.store.allow_mmap: false
