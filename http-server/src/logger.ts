@@ -16,11 +16,7 @@ const logger = createLogger({
     customFormat,
   ),
   transports: [
-    new transports.File({ 
-      filename: process.env.NODE_ENV == 'dev' 
-        ? 'logs/httpserver.log'
-        : '/var/log/httpserver.log' 
-    }),
+    new transports.Console()
   ],
 });
 
