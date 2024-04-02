@@ -31,7 +31,7 @@ k create -f .
 Connect to specific pod's shell:
 
 ```
-kubectl exec --stdin --tty server-6cbdc7db5b-2smzd -- /bin/bash
+k exec --stdin --tty http-server-6cbdc7db5b-2smzd -- /bin/bash
 ```
 
 Get URL:
