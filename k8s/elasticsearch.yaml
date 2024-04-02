@@ -21,3 +21,4 @@ type: kubernetes.io/basic-auth
 stringData:
   username: elastic
   password: secret
+  roles: all
