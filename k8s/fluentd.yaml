@@ -1,39 +1,36 @@
 apiVersion: v1
-kind: ConfigMap
+kind: ServiceAccount
 metadata:
-  name: fluentd-config
+  name: fluentd
   namespace: kube-system
-data:
-  fluent.conf: |
-    <source>
-      @type tail
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      tag kube.*
-      read_from_head true
-      <parse>
-        @type json
-      </parse>
-    </source>
-
-    <filter kube.**>
-      @type kubernetes_metadata
-    </filter>
-
-    <match kube.**>
-      @type elasticsearch
-      host elasticsearch-es-http.default.svc
-      port 9200
-      scheme https
-      ssl_verify false
-      index_name fluentd
-      type_name fluentd
-      include_tag_key true
-      tag_key @log_name
-      logstash_format true
-      logstash_prefix kubernetes
-      flush_interval 1s
-    </match>
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fluentd
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd
+roleRef:
+  kind: ClusterRole
+  name: fluentd
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: fluentd
+  namespace: kube-system
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -45,24 +42,64 @@ metadata:
 spec:
   selector:
     matchLabels:
-      name: fluentd
+      k8s-app: fluentd-logging
   template:
     metadata:
       labels:
-        name: fluentd
+        k8s-app: fluentd-logging
     spec:
+      serviceAccount: fluentd
+      serviceAccountName: fluentd
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
       containers:
       - name: fluentd
-        image: fluent/fluentd:v1.16-debian-1
+        image: fluent/fluentd-kubernetes-daemonset:v1.16-debian-elasticsearch8-2
+        env:
+        - name: K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: FLUENT_ELASTICSEARCH_HOST
+          value: "elasticsearch-es-http.default.svc"
+        - name: FLUENT_ELASTICSEARCH_PORT
+          value: "9200"
+        - name: FLUENT_ELASTICSEARCH_SCHEME
+          value: "https"
+        - name: FLUENT_ELASTICSEARCH_SSL_VERIFY
+          value: "false"
+        - name: FLUENT_ELASTICSEARCH_SSL_VERSION
+          value: "TLSv1_2"
+        - name: FLUENT_ELASTICSEARCH_USER
+          value: "elastic"
+        - name: FLUENT_ELASTICSEARCH_PASSWORD
+          value: "secret"
+        - name: FLUENTD_DAEMON_USER
+          value: root
+        - name: FLUENTD_DAEMON_GROUP
+          value: root
+        - name: FLUENTD_SYSTEMD_CONF
+          value: "disable"
+        - name: FLUENT_CONTAINER_TAIL_PARSER_TYPE
+          value: "json"
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
         volumeMounts:
-        - name: config-volume
-          mountPath: /fluentd/etc
-        - name: varlogcontainers
-          mountPath: /var/log/containers
+        - name: varlog
+          mountPath: /var/log
+        - name: dockercontainerlogdirectory
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: config-volume
-        configMap:
-          name: fluentd-config
-      - name: varlogcontainers
+      - name: varlog
         hostPath:
-          path: /var/log/containers
+          path: /var/log
+      - name: dockercontainerlogdirectory
+        hostPath:
+          path: /var/lib/docker/containers
